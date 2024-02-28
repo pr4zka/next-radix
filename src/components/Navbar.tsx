@@ -8,7 +8,10 @@ import { signOut, useSession } from "next-auth/react"
 
 function Navbar() {
 
-    const {data: session} = useSession()
+    const {data: session, status} = useSession()
+
+  if(status === 'loading') return null
+  
  return (
   <nav className="py-4 bg-sky-900">
      <Container >

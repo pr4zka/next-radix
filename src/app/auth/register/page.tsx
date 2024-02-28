@@ -8,7 +8,7 @@ function RegisterPage() {
   return (
     <>
      <Container size='1' height='100%' className='p-3 md:p-0'>
-     <Flex className='h-screen w-full items-center'>
+     <Flex className='h-[calc(100vh-10rem)] w-full items-center'>
      <Card className='w-full p-7'>
             <Heading align="center">Regista un Usuario</Heading>
             <SignupForm />
