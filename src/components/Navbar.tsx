@@ -17,7 +17,7 @@ function Navbar() {
      <Container >
      <Flex justify="between" align="center">
           <NextLink href="/">
-            <Heading size="3">Next Auth</Heading>
+            <Heading size="3">Dashboard</Heading>
           </NextLink>
          <ul className="flex gap-x-4 items-center">
            { !session && (
@@ -26,11 +26,6 @@ function Navbar() {
                     <Link asChild>
                         <NextLink href='/auth/login'>Login</NextLink>
                     </Link>
-                    </li>
-                    <li>
-                        <Link asChild>
-                            <NextLink href='/auth/register'>Register</NextLink>
-                        </Link>
                     </li>
               </>
            )}

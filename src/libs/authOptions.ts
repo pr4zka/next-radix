@@ -1,38 +1,38 @@
 import { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import prisma from "@/libs/prisma"
-import bcrypt from 'bcrypt'
-
+import axios from 'axios'
 
 export const authOptions: AuthOptions = {
     providers: [
       CredentialsProvider({
           name: 'credentials',
           credentials: {
-              email: { label: "email", type: "email" },
+              username: { label: "username", type: "text"},
               password: {  label: "Password", type: "password" }
           },
-           async authorize(credentials :any, req){
-            const {email, password} = credentials
-            const userFound = await prisma.user.findUnique({
-               where: {email}
-            })
-            if(!userFound) throw new Error('User not found')
-            const validPassword = await bcrypt.compare(password, userFound.password)
-            if(!validPassword) throw new Error('Password incorrect')
-  
-              return {
-                id: userFound.id + '',
-                email: userFound.email,
-                name: userFound.name  
+           async authorize(credentials : any, req){
+            const { username, password } = credentials;
+            try {
+              const response = await axios.post('https://billetera.z1.mastarjeta.net/auth-token/', { username, password });
+              const data = response.data;
+              if (data.token) {
+                return {
+                  ...data,
+                  accessToken: data.token 
+                };
+              } else {
+                throw new Error('Invalid credentials');
               }
+            } catch (error: any) {
+              throw new Error('Invalid credentials');
+            }
            }
       })
     ],
     callbacks:  {
-      async jwt({token, user}){
-        if(user){
-          token.id = user.id
+      async jwt({ token }){
+        if(token){
+          token.accessToken = token.accessToken
         }
         return token
       },
